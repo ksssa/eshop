@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+package user.v1;
+option go_package = "api/user/v1;v1";
+
+service User {
+    rpc Login(LoginRequest) returns (LoginResponse) {}
+    rpc Register(RegisterRequest) returns (google.protobuf.Empty) {}
+    rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
+    rpc Update(UpdateRequest) returns (google.protobuf.Empty) {}
+    rpc Get(GetRequest) returns (GetResponse) {}
+    rpc List(ListRequest) returns (ListResponse) {}
+    rpc LoginOut(LoginOutRequest) returns (google.protobuf.Empty) {}
+    rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {}
+}
+
+message RegisterRequest {
+    string Email  = 1;
+    string passwd = 2;
+    string nick   = 3;
+    string mobile = 4;
+}
+
+message UserInfo {
+    int64 id           = 1;
+    string nick        = 2;
+    string email       = 3;
+    string name        = 4;
+    string public_key  = 5;
+    string private_key = 6;
+    int32 status       = 7;
+    int64 create_time  = 8;
+    int64 update_time  = 9;
+}
+
+message LoginRequest {
+    string email    = 1;
+    string password = 2;
+}
+message LoginResponse {
+    UserInfo user        = 1;
+    string access_token  = 2;
+    string refresh_token = 3;
+}
+
+message UpdateRequest {
+    UserInfo user = 1;
+}
+
+message UpdateResponse {
+}
+
+message GetRequest {
+    int64 id = 1;
+}
+
+message GetResponse {
+    UserInfo user = 1;
+}
+
+message Page {
+    int32 page  = 1;
+    int32 limit = 2;
+}
+
+message ListFilter {
+    string name  = 1;
+    string nick  = 2;
+    string email = 3;
+    Page page    = 4;
+}
+
+message ListRequest {
+    int64 page        = 1;
+    int64 limit       = 2;
+    ListFilter filter = 3;
+}
+
+message ListResponse {
+    repeated UserInfo users = 1;
+    int64 total             = 2;
+}
+
+message LoginOutRequest {
+}
+
+message LoginOutResponse {
+}
+
+message DeleteRequest {
+    int64 id = 1;
+}
+
+message DeleteResponse {
+}
+
+message RefreshTokenRequest {
+    string refresh_token = 1;
+}
+
+message RefreshTokenResponse {
+    string access_token = 1;
+}
