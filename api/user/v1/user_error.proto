@@ -12,4 +12,7 @@ enum UserServiceErrorReason {
     UNKNOWN_ERROR   = 0;
     LOGIN_FAILED    = 1;
     REGISTER_FAILED = 2;
+    PASSWD_INVALID  = 3;
+    MOBILE_INVALID  = 4;
+    EMAIL_INVALID   = 5;
 }

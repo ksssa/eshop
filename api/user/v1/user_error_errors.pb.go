@@ -46,3 +46,39 @@ func IsRegisterFailed(err error) bool {
 func ErrorRegisterFailed(format string, args ...interface{}) *errors.Error {
 	return errors.New(500, UserServiceErrorReason_REGISTER_FAILED.String(), fmt.Sprintf(format, args...))
 }
+
+func IsPasswdInvalid(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == UserServiceErrorReason_PASSWD_INVALID.String() && e.Code == 500
+}
+
+func ErrorPasswdInvalid(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_PASSWD_INVALID.String(), fmt.Sprintf(format, args...))
+}
+
+func IsMobileInvalid(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == UserServiceErrorReason_MOBILE_INVALID.String() && e.Code == 500
+}
+
+func ErrorMobileInvalid(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_MOBILE_INVALID.String(), fmt.Sprintf(format, args...))
+}
+
+func IsEmailInvalid(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == UserServiceErrorReason_EMAIL_INVALID.String() && e.Code == 500
+}
+
+func ErrorEmailInvalid(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_EMAIL_INVALID.String(), fmt.Sprintf(format, args...))
+}

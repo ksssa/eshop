@@ -7,6 +7,7 @@ import (
 )
 
 func (s *UserService) Register(ctx context.Context, req *user.RegisterRequest) *errors.Error {
+
 	return nil
 }
 
