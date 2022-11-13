@@ -16,7 +16,7 @@ func TestMain(m *testing.M) {
 	d = new(Data)
 
 	cacheCfg := &config.RedisConfig{
-		Host:   "10.0.2.222",
+		Host:   "192.168.1.10",
 		Port:   6379,
 		Passwd: "111111",
 	}
@@ -27,7 +27,11 @@ func TestMain(m *testing.M) {
 }
 
 func TestRedis(t *testing.T) {
-	res, err := d.cache.Set("eshop", "1111", time.Duration(time.Now().Unix())).Result()
+	res, err := d.Cache.Set("eshop", "1111", time.Duration(time.Now().Unix())).Result()
 	require.NoError(t, err)
-	fmt.Printf("%+v", res)
+	fmt.Printf("%+v\n", res)
+	res, err = d.Cache.Get("eshop1").Result()
+	fmt.Println(res, err)
+	require.NoError(t, err)
+	fmt.Println(res)
 }

@@ -18,6 +18,7 @@ func (b *BusinessHandler) UpdateUser(user *model.User) error {
 }
 
 func (b *BusinessHandler) GetUser(id int64) (user *model.User, err error) {
+	user = new(model.User)
 	exist, err := b.data.Db.ID(id).Get(user)
 	if err != nil {
 		return
@@ -38,8 +39,9 @@ func (b *BusinessHandler) ListUser(filter *user.ListFilter) (users []*model.User
 		session = session.And("nick=?", filter.Nick)
 	}
 	start, end := b.data.Page(filter.Page)
+	users = make([]*model.User, 0)
 	session = session.Limit(end, start).Desc("create_time")
-	total, err = session.FindAndCount(users)
+	total, err = session.FindAndCount(&users)
 	if err != nil {
 		return
 	}

@@ -10,9 +10,18 @@ enum UserServiceErrorReason {
     option (errors.default_code) = 500;
 
     UNKNOWN_ERROR   = 0;
-    LOGIN_FAILED    = 1;
-    REGISTER_FAILED = 2;
-    PASSWD_INVALID  = 3;
-    MOBILE_INVALID  = 4;
-    EMAIL_INVALID   = 5;
+    PARAM_NOT_ENOUGH=1;
+    
+
+
+    PARAM_INVALID  = 101;
+    USER_EXIST=102;
+    USER_NOT_EXIST=103;
+
+	
+   TOKEN_INVALID=110;
+   TOKEN_EXPIRE=111;
+   REFRESH_TOKEN_INVALID=112;
+   REFRESH_TOKEN_EXPIRE=113;
+
 }

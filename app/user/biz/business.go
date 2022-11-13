@@ -25,6 +25,7 @@ func (b *BusinessHandler) Initialized() {
 	if b.initialized {
 		return
 	}
-	b.data.Initialize(b.conf)
+	b.data = data.New(b.conf)
+	b.data.Initialize()
 	b.initialized = true
 }

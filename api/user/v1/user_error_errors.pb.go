@@ -23,62 +23,98 @@ func ErrorUnknownError(format string, args ...interface{}) *errors.Error {
 	return errors.New(500, UserServiceErrorReason_UNKNOWN_ERROR.String(), fmt.Sprintf(format, args...))
 }
 
-func IsLoginFailed(err error) bool {
+func IsParamNotEnough(err error) bool {
 	if err == nil {
 		return false
 	}
 	e := errors.FromError(err)
-	return e.Reason == UserServiceErrorReason_LOGIN_FAILED.String() && e.Code == 500
+	return e.Reason == UserServiceErrorReason_PARAM_NOT_ENOUGH.String() && e.Code == 500
 }
 
-func ErrorLoginFailed(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, UserServiceErrorReason_LOGIN_FAILED.String(), fmt.Sprintf(format, args...))
+func ErrorParamNotEnough(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_PARAM_NOT_ENOUGH.String(), fmt.Sprintf(format, args...))
 }
 
-func IsRegisterFailed(err error) bool {
+func IsParamInvalid(err error) bool {
 	if err == nil {
 		return false
 	}
 	e := errors.FromError(err)
-	return e.Reason == UserServiceErrorReason_REGISTER_FAILED.String() && e.Code == 500
+	return e.Reason == UserServiceErrorReason_PARAM_INVALID.String() && e.Code == 500
 }
 
-func ErrorRegisterFailed(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, UserServiceErrorReason_REGISTER_FAILED.String(), fmt.Sprintf(format, args...))
+func ErrorParamInvalid(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_PARAM_INVALID.String(), fmt.Sprintf(format, args...))
 }
 
-func IsPasswdInvalid(err error) bool {
+func IsUserExist(err error) bool {
 	if err == nil {
 		return false
 	}
 	e := errors.FromError(err)
-	return e.Reason == UserServiceErrorReason_PASSWD_INVALID.String() && e.Code == 500
+	return e.Reason == UserServiceErrorReason_USER_EXIST.String() && e.Code == 500
 }
 
-func ErrorPasswdInvalid(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, UserServiceErrorReason_PASSWD_INVALID.String(), fmt.Sprintf(format, args...))
+func ErrorUserExist(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_USER_EXIST.String(), fmt.Sprintf(format, args...))
 }
 
-func IsMobileInvalid(err error) bool {
+func IsUserNotExist(err error) bool {
 	if err == nil {
 		return false
 	}
 	e := errors.FromError(err)
-	return e.Reason == UserServiceErrorReason_MOBILE_INVALID.String() && e.Code == 500
+	return e.Reason == UserServiceErrorReason_USER_NOT_EXIST.String() && e.Code == 500
 }
 
-func ErrorMobileInvalid(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, UserServiceErrorReason_MOBILE_INVALID.String(), fmt.Sprintf(format, args...))
+func ErrorUserNotExist(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_USER_NOT_EXIST.String(), fmt.Sprintf(format, args...))
 }
 
-func IsEmailInvalid(err error) bool {
+func IsTokenInvalid(err error) bool {
 	if err == nil {
 		return false
 	}
 	e := errors.FromError(err)
-	return e.Reason == UserServiceErrorReason_EMAIL_INVALID.String() && e.Code == 500
+	return e.Reason == UserServiceErrorReason_TOKEN_INVALID.String() && e.Code == 500
 }
 
-func ErrorEmailInvalid(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, UserServiceErrorReason_EMAIL_INVALID.String(), fmt.Sprintf(format, args...))
+func ErrorTokenInvalid(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_TOKEN_INVALID.String(), fmt.Sprintf(format, args...))
+}
+
+func IsTokenExpire(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == UserServiceErrorReason_TOKEN_EXPIRE.String() && e.Code == 500
+}
+
+func ErrorTokenExpire(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_TOKEN_EXPIRE.String(), fmt.Sprintf(format, args...))
+}
+
+func IsRefreshTokenInvalid(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == UserServiceErrorReason_REFRESH_TOKEN_INVALID.String() && e.Code == 500
+}
+
+func ErrorRefreshTokenInvalid(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_REFRESH_TOKEN_INVALID.String(), fmt.Sprintf(format, args...))
+}
+
+func IsRefreshTokenExpire(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == UserServiceErrorReason_REFRESH_TOKEN_EXPIRE.String() && e.Code == 500
+}
+
+func ErrorRefreshTokenExpire(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, UserServiceErrorReason_REFRESH_TOKEN_EXPIRE.String(), fmt.Sprintf(format, args...))
 }
