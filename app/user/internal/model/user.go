@@ -11,6 +11,7 @@ type User struct {
 	Mobile     string `xorm:"default '' comment('手机号')" json:"mobile"`
 	PublicKey  string `xorm:"default '' comment('用户公钥')" json:"publicKey"`
 	PrivateKey string `xorm:"default '' comment('用户私钥')" json:"privateKey"`
+	IsAdmin    bool   `xorm:"default false comment('是否管理员')" json:"isAdmin"`
 	CreateTime int64  `xorm:"created" json:"createTime"`
 	UpdateTime int64  `xorm:"updated" json:"updateTime"`
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-xorm/xorm"
+	"time"
 )
 
 func (b *BusinessHandler) CreateToken(token *model.Token) error {
@@ -17,6 +18,7 @@ func (b *BusinessHandler) CreateToken(token *model.Token) error {
 }
 
 func (b *BusinessHandler) getToken(accessToken string) (token *model.Token, err error) {
+	token = new(model.Token)
 	exist, err := b.data.Db.Where("access_token=?", accessToken).Get(token)
 	if err != nil {
 		return
@@ -58,6 +60,9 @@ func (b *BusinessHandler) CheckToken(token string) (int64, bool, error) {
 			return 0, false, err
 		}
 	}
+	if tokenInfo.AccessTokenExpire < time.Now().Unix() {
+		return 0, false, innerr.ErrTokenExpire
+	}
 	return tokenInfo.UserId, tokenInfo.IsAdmin, nil
 }
 
@@ -77,6 +82,9 @@ func (b *BusinessHandler) getTokenFromCache(token string) (*model.Token, error) 
 	res, err := b.data.Cache.HGetAll(key).Result()
 	if err != nil {
 		return nil, err
+	}
+	if len(res) == 0 {
+		return nil, innerr.ErrCacheNotExist
 	}
 	tokenInfo, err := model.Cache2Token(res)
 	if err != nil {

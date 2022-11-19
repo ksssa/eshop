@@ -3,13 +3,17 @@ package biz
 import (
 	"eshop/app/user/internal/model"
 	"eshop/app/user/internal/util"
+	"fmt"
 	"github.com/stretchr/testify/require"
 	"testing"
 	"time"
 )
 
 func TestBusinessHandler_CheckToken(t *testing.T) {
-
+	token := "907ab9b8-3a4e-499a-8bc4-f0f0265c970e"
+	userId, isAdmin, err := bizHandler.CheckToken(token)
+	require.NoError(t, err)
+	fmt.Println(userId, isAdmin)
 }
 
 func TestBusinessHandler_CreateToken(t *testing.T) {
@@ -28,7 +32,7 @@ func TestBusinessHandler_CreateToken(t *testing.T) {
 }
 
 func TestBusinessHandler_DeleteToken(t *testing.T) {
-	token := ""
+	token := "907ab9b8-3a4e-499a-8bc4-f0f0265c970e"
 	err := bizHandler.DeleteToken(token)
 	require.NoError(t, err)
 }

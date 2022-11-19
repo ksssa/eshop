@@ -27,7 +27,7 @@ func Token2Cache(token *Token) map[string]interface{} {
 }
 func Cache2Token(values map[string]string) (*Token, error) {
 	token := new(Token)
-	id, err := strconv.ParseInt(values["id"], 10, 32)
+	id, err := strconv.ParseInt(values["id"], 10, 64)
 	if err != nil {
 		return token, err
 	}
@@ -44,7 +44,7 @@ func Cache2Token(values map[string]string) (*Token, error) {
 		return token, err
 	}
 	token.RefreshTokenExpire = num
-	num, err = strconv.ParseInt(values["userId"], 10, 32)
+	num, err = strconv.ParseInt(values["userId"], 10, 64)
 	if err != nil {
 		return token, err
 	}

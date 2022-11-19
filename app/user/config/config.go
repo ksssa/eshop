@@ -1,5 +1,11 @@
 package config
 
+import (
+	"github.com/go-kratos/kratos/v2/log"
+	"gopkg.in/yaml.v2"
+	"os"
+)
+
 type ServiceConfig struct {
 	Host     string `yaml:"host"`
 	Name     string `yaml:"name"`
@@ -30,7 +36,35 @@ type EtcdConfig struct {
 }
 
 type Config struct {
-	Db    *DbConfig    `yaml:"db"`
-	Redis *RedisConfig `yaml:"redis"`
-	Etcd  *EtcdConfig  `yaml:"etcd"`
+	Db      *DbConfig      `yaml:"db"`
+	Redis   *RedisConfig   `yaml:"redis"`
+	Etcd    *EtcdConfig    `yaml:"etcd"`
+	Service *ServiceConfig `yaml:"service"`
+}
+
+func LoadConfig(path string) (*Config, error) {
+	configFile, err := os.ReadFile(path)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+	c := new(Config)
+	err = yaml.Unmarshal(configFile, c)
+	return c, err
+}
+
+func CheckConfig(c *Config) bool {
+	if c == nil || c.Db == nil || c.Service == nil || c.Redis == nil {
+		log.Error("necessary config is nil")
+		return false
+	}
+	if len(c.Service.Host) == 0 {
+		log.Error("host is empty")
+		return false
+	}
+	if len(c.Db.Host) == 0 {
+		log.Error("db host is empty")
+		return false
+	}
+	return true
 }

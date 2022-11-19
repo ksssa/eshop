@@ -6,6 +6,7 @@ import (
 	"eshop/app/user/internal/model"
 	"eshop/app/user/internal/util"
 	"github.com/go-kratos/kratos/v2/errors"
+	"github.com/golang/protobuf/ptypes/empty"
 )
 
 func (s *UserService) Register(ctx context.Context, req *user.RegisterRequest) *errors.Error {
@@ -110,25 +111,27 @@ func (s *UserService) List(ctx context.Context, req *user.ListRequest) (*user.Li
 	return resp, nil
 }
 
-func (s *UserService) Delete(ctx context.Context, req *user.DeleteRequest) *errors.Error {
+func (s *UserService) Delete(ctx context.Context, req *user.DeleteRequest) (empty *empty.Empty, pbErr *errors.Error) {
 	//admin才需要
 	token, err := util.GetTokenFromCtx(ctx)
 	if err != nil {
-		return user.ErrorUnknownError(err.Error())
+		pbErr = user.ErrorUnknownError(err.Error())
+		return
 	}
 	_, isAdmin, err := s.bizHandler.CheckToken(token)
 	if err != nil {
-		return user.ErrorTokenInvalid(err.Error())
+		pbErr = user.ErrorTokenInvalid(err.Error())
+		return
 	}
 	if !isAdmin {
-
 	}
 	if req.Id == 0 {
-		return user.ErrorParamNotEnough("id is empty")
+		pbErr = user.ErrorParamNotEnough("id is empty")
+		return
 	}
 	err = s.bizHandler.DeleteUser(req.Id)
 	if err != nil {
-		return user.ErrorUnknownError(err.Error())
+		pbErr = user.ErrorUnknownError(err.Error())
 	}
-	return nil
+	return
 }

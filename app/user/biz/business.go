@@ -19,13 +19,16 @@ func New(conf *config.Config) *BusinessHandler {
 	return b
 }
 
-func (b *BusinessHandler) Initialized() {
+func (b *BusinessHandler) Initialized() error {
 	b.Lock()
 	defer b.Unlock()
 	if b.initialized {
-		return
+		return nil
 	}
 	b.data = data.New(b.conf)
-	b.data.Initialize()
+	if err := b.data.Initialize(); err != nil {
+		return err
+	}
 	b.initialized = true
+	return nil
 }

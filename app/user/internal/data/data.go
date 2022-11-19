@@ -5,10 +5,10 @@ import (
 	"eshop/app/user/config"
 	"eshop/app/user/internal/model"
 	"fmt"
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-redis/redis"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
-	"log"
 	"sync"
 	"time"
 )
@@ -28,22 +28,28 @@ func New(conf *config.Config) *Data {
 	return d
 }
 
-func (d *Data) Initialize() {
+func (d *Data) Initialize() error {
 	d.Lock()
 	defer d.Unlock()
 	if d.initialize {
-		return
+		return nil
 	}
-	d.initDB(d.conf.Db)
-	d.initCache(d.conf.Redis)
+	if err := d.initDB(d.conf.Db); err != nil {
+		return err
+	}
+	if err := d.initCache(d.conf.Redis); err != nil {
+		return err
+	}
 	d.initialize = true
+	return nil
 }
 
-func (d *Data) initDB(config *config.DbConfig) {
+func (d *Data) initDB(config *config.DbConfig) error {
 	uri := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8", config.User, config.Passwd, config.Host, config.Port, config.DBName)
 	engine, err := xorm.NewEngine("mysql", uri)
 	if err != nil {
-		log.Fatalf("init db failed,%+v", err)
+		log.Errorf("init db failed,%+v", err)
+		return err
 	}
 	d.Db = engine
 	d.Db.SetMaxOpenConns(config.MaxConn)
@@ -52,26 +58,30 @@ func (d *Data) initDB(config *config.DbConfig) {
 	d.Db.ShowSQL(config.ShowLog)
 	err = d.Db.Ping()
 	if err != nil {
-		log.Fatalf("init db failed,err:%v", err)
+		log.Errorf("init db failed,err:%v", err)
+		return err
 	}
 	err = d.Db.Sync2(new(model.User), new(model.Token))
 	if err != nil {
-		log.Fatalf("init db failed,err:%v", err)
+		log.Errorf("init db failed,err:%v", err)
+		return err
 	}
+	return nil
 }
 
-func (d *Data) initCache(config *config.RedisConfig) {
+func (d *Data) initCache(config *config.RedisConfig) error {
 	client := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%d", config.Host, config.Port),
 		Password: config.Passwd,
 		DB:       0,
 	})
-	pong, err := client.Ping().Result()
+	_, err := client.Ping().Result()
 	if err != nil {
-		log.Fatalf("init cache failed,err:%v", err)
+		log.Errorf("init cache failed,err:%v", err)
+		return err
 	}
 	d.Cache = client
-	log.Println(pong)
+	return nil
 }
 
 func (d *Data) Page(p *user.Page) (int, int) {
